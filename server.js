@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const axios = require('axios');
 
 const fs = require('fs');
 const app = express();
@@ -55,6 +56,8 @@ app.post('/login', (req, res) => {
     );
 });
 */
+
+/*
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
   
@@ -100,6 +103,116 @@ app.post('/login', (req, res) => {
       }
     );
   });
+  */
+
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    // Query the user table to find the user by username
+    db.query(
+      'SELECT * FROM user WHERE username = ?', [username],
+      (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+  
+        // If user exists, check if the passwords match
+        if (results.length > 0) {
+          const user = results[0];
+  
+          // Compare the passwords directly (plain text comparison)
+          if (password === user.password) {
+            if (user.role === 'admin') {
+              // If user is an admin, return all employees
+              db.query('SELECT * FROM employee', (err, employees) => {
+                if (err) return res.status(500).json({ error: err.message });
+                res.json({ role: user.role, employees });
+              });
+            } else {
+              // Query the employee table using the user.id to get employee info
+              db.query(
+                'SELECT * FROM employee WHERE id = ?', [user.id],
+                (err, employeeResults) => {
+                  if (err) return res.status(500).json({ error: err.message });
+                  if (employeeResults.length > 0) {
+                    const employee = employeeResults[0];
+                    res.json({
+                      id: employee.id,
+                      name: employee.name,
+                      email: employee.email,
+                      phone: employee.phone,
+                      position: employee.position,
+                      salary: employee.salary,
+                      role: user.role,
+                    });
+                  } else {
+                    res.status(404).json({ error: 'Employee not found' });
+                  }
+                }
+              );
+            }
+          } else {
+            res.status(401).json({ error: 'Invalid credentials' });
+          }
+        } else {
+          res.status(401).json({ error: 'Invalid credentials' });
+        }
+      }
+    );
+  });
+  
+
+  /*
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    console.log(1);
+    db.query('SELECT * FROM user WHERE username = ?', [username], (err, results) => {
+      console.log(2);
+        if (err) return res.status(500).json({ error: err.message });
+
+        if (results.length > 0) {
+          console.log(3);
+            const user = results[0];
+
+            if (password === user.password) {
+              console.log(4);
+                if (user.role === 'admin') {
+                  console.log(5);
+                  // Use an API to get the list of all employees
+                    axios.get('https://cysec-victim-backend.onrender.com/employees')  // Replace with your API endpoint
+                        .then(response => {
+                          console.log(6);
+                            res.json({ role: user.role, employees: response.data });  // Send employee data from the API
+                        })
+                        .catch(apiErr => {
+                            res.status(500).json({ error: apiErr.message });  // Handle API error
+                        });
+                } else {
+                  console.log(7);
+                    // ✅ Return only the employee data for non-admin users
+                    db.query('SELECT * FROM employee WHERE id = ?', [user.id], (err, employeeResults) => {
+                        if (err) return res.status(500).json({ error: err.message });
+                        if (employeeResults.length > 0) {
+                            res.json({
+                                role: user.role,
+                                employee: employeeResults[0],  // ✅ Send only their data
+                            });
+                        } else {
+                            res.status(404).json({ error: 'Employee not found' });
+                        }
+                    });
+                }
+            } else {
+                res.status(401).json({ error: 'Invalid credentials' });
+            }
+        } else {
+            res.status(401).json({ error: 'Invalid credentials' });
+        }
+    });
+});
+*/
+
+
+
   
   
 
