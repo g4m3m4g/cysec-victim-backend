@@ -44,6 +44,10 @@ db.query(`CREATE TABLE IF NOT EXISTS employee (
     else console.log('Employee table ready');
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 app.get('/sitemap.xml', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
 });
