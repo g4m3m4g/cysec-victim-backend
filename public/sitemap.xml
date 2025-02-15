@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
+  <url>
+    <loc>https://cysec-victim-backend.onrender.com</loc>
+    <lastmod>2025-02-15</lastmod>
+    <priority>1.00</priority>
+  </url>
+
+  <!-- Employee Routes -->
+  <url>
+    <loc>https://cysec-victim-backend.onrender.com/employees</loc>
+    <lastmod>2025-02-15</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://cysec-victim-backend.onrender.com/employees/:id</loc>
+    <lastmod>2025-02-15</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Achievements Routes -->
+  <url>
+    <loc>https://cysec-victim-backend.onrender.com/achievements</loc>
+    <lastmod>2025-02-15</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://cysec-victim-backend.onrender.com/achievements/:id</loc>
+    <lastmod>2025-02-15</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Employee Post, Put, Delete Routes -->
+  <url>
+    <loc>https://cysec-victim-backend.onrender.com/employees</loc>
+    <lastmod>2025-02-15</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://cysec-victim-backend.onrender.com/employees/:id</loc>
+    <lastmod>2025-02-15</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+</urlset>

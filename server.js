@@ -3,12 +3,14 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const axios = require('axios');
+const path = require('path');
 
 const fs = require('fs');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // TiDB Connection
 const db = mysql.createConnection({
@@ -40,6 +42,10 @@ db.query(`CREATE TABLE IF NOT EXISTS employee (
 )`, err => {
     if (err) console.error('Error creating table:', err);
     else console.log('Employee table ready');
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
 });
 
 // Login Route
@@ -231,6 +237,22 @@ app.get('/employees/:id', (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });
+});
+
+app.get('/achievements', (req, res) => {
+  const id = req.params.id; // Directly using user input
+  db.query(`SELECT * FROM achievements`, (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(results);
+  });
+});
+
+app.get('/achievements/:id', (req, res) => {
+  const id = req.params.id; 
+  db.query(`SELECT * FROM achievements WHERE AchievementID  = ${id}`, (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(results);
+  });
 });
 
 
